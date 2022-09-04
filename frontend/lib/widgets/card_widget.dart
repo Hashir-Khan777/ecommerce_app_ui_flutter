@@ -23,7 +23,7 @@ Widget customCard(
           width: double.infinity,
           height: 120,
           margin: const EdgeInsets.only(bottom: 10),
-          child: Image.asset(
+          child: Image.network(
             image,
             fit: BoxFit.cover,
           ),

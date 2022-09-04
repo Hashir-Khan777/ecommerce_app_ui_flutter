@@ -1,34 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/color_contants.dart';
+import 'package:frontend/controllers/product_controller.dart';
 import 'package:frontend/widgets/card_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  int sliderIndex = 0;
-  List<String> images = [
-    'assets/image1.png',
-    'assets/image2.png',
-    'assets/image1.png'
-  ];
-  final Future<SharedPreferences> storageInstance =
-      SharedPreferences.getInstance();
-  String? user;
-
-  @override
-  void initState() {
-    super.initState();
-    storageInstance.then(
-      (SharedPreferences prefs) => user = prefs.getString("user"),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,39 +51,40 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        actions: user != null
-            ? [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.favorite_outline,
-                        color: Color(ColorConstants.primaryGrey),
-                        size: 30,
+        actions: [
+          GetBuilder<ProductController>(
+            id: "user",
+            builder: (controller) => controller.user != null
+                ? Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.favorite_outline,
+                          color: Color(ColorConstants.primaryGrey),
+                          size: 30,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.notifications_outlined,
-                        color: Color(ColorConstants.primaryGrey),
-                        size: 30,
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.notifications_outlined,
+                          color: Color(ColorConstants.primaryGrey),
+                          size: 30,
+                        ),
                       ),
+                    ],
+                  )
+                : IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.login_outlined,
+                      color: Color(ColorConstants.primaryGrey),
+                      size: 30,
                     ),
-                  ],
-                ),
-              ]
-            : [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.login_outlined,
-                    color: Color(ColorConstants.primaryGrey),
-                    size: 30,
                   ),
-                ),
-              ],
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -116,45 +95,50 @@ class _HomeState extends State<Home> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CarouselSlider(
-                    options: CarouselOptions(
+                  GetBuilder<ProductController>(
+                    init: ProductController(),
+                    builder: (controller) => CarouselSlider(
+                      options: CarouselOptions(
                         viewportFraction: 1,
                         aspectRatio: 16 / 9,
                         enableInfiniteScroll: false,
                         initialPage: 0,
                         onPageChanged: (index, reson) {
-                          setState(() {
-                            sliderIndex = index;
-                          });
-                        }),
-                    items: images.map((i) {
-                      return Image.asset(
-                        i,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width,
-                      );
-                    }).toList(),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    height: 11,
-                    child: ListView.builder(
-                      itemCount: images.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          width: 11,
-                          margin: const EdgeInsets.symmetric(horizontal: 2),
-                          decoration: BoxDecoration(
-                            color: index == sliderIndex
-                                ? Color(ColorConstants.primaryBlue)
-                                : Color(ColorConstants.primaryGrey)
-                                    .withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
+                          controller.changeSliderIndex(index);
+                        },
+                      ),
+                      items: controller.images.map((i) {
+                        return Image.asset(
+                          i,
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width,
                         );
-                      },
+                      }).toList(),
+                    ),
+                  ),
+                  GetBuilder<ProductController>(
+                    id: "slider",
+                    builder: (controller) => Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      height: 11,
+                      child: ListView.builder(
+                        itemCount: controller.images.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: 11,
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            decoration: BoxDecoration(
+                              color: index == controller.sliderIndex
+                                  ? Color(ColorConstants.primaryBlue)
+                                  : Color(ColorConstants.primaryGrey)
+                                      .withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -166,21 +150,36 @@ class _HomeState extends State<Home> {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
               ),
+              GetBuilder<ProductController>(
+                  id: "products",
+                  builder: (controller) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: controller.products.length,
+                        itemBuilder: (context, index) {
+                          return customCard(
+                            context,
+                            image: controller.products[index].image ?? "",
+                            name: controller.products[index].name ?? "",
+                            price: "${controller.products[index].price}",
+                          );
+                        });
+                  }),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  customCard(
-                    context,
-                    image: "assets/image1.png",
-                    name: "Product 1",
-                    price: "400",
-                  ),
-                  customCard(
-                    context,
-                    image: "assets/image1.png",
-                    name: "Product 1",
-                    price: "400",
-                  ),
+                  // customCard(
+                  //   context,
+                  //   image: "assets/image1.png",
+                  //   name: "Product 1",
+                  //   price: "400",
+                  // ),
+                  // customCard(
+                  //   context,
+                  //   image: "assets/image1.png",
+                  //   name: "Product 1",
+                  //   price: "400",
+                  // ),
                 ],
               )
             ],
