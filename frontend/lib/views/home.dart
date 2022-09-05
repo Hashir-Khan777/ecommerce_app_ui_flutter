@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/color_contants.dart';
 import 'package:frontend/controllers/product_controller.dart';
+import 'package:frontend/views/login.dart';
 import 'package:frontend/widgets/card_widget.dart';
 import 'package:get/get.dart';
 
@@ -76,7 +77,7 @@ class Home extends StatelessWidget {
                     ],
                   )
                 : IconButton(
-                    onPressed: () {},
+                    onPressed: () => Get.to(const Login()),
                     icon: Icon(
                       Icons.login_outlined,
                       color: Color(ColorConstants.primaryGrey),
@@ -99,6 +100,7 @@ class Home extends StatelessWidget {
                     init: ProductController(),
                     builder: (controller) => CarouselSlider(
                       options: CarouselOptions(
+                        autoPlay: true,
                         viewportFraction: 1,
                         aspectRatio: 16 / 9,
                         enableInfiniteScroll: false,
@@ -151,37 +153,32 @@ class Home extends StatelessWidget {
                 ),
               ),
               GetBuilder<ProductController>(
-                  id: "products",
-                  builder: (controller) {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.products.length,
-                        itemBuilder: (context, index) {
-                          return customCard(
-                            context,
-                            image: controller.products[index].image ?? "",
-                            name: controller.products[index].name ?? "",
-                            price: "${controller.products[index].price}",
-                          );
-                        });
-                  }),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // customCard(
-                  //   context,
-                  //   image: "assets/image1.png",
-                  //   name: "Product 1",
-                  //   price: "400",
-                  // ),
-                  // customCard(
-                  //   context,
-                  //   image: "assets/image1.png",
-                  //   name: "Product 1",
-                  //   price: "400",
-                  // ),
-                ],
-              )
+                id: "products",
+                builder: (controller) {
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0,
+                      mainAxisExtent: 209,
+                    ),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.products.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        child: customCard(
+                          context,
+                          image: controller.products[index].image ?? "",
+                          name: controller.products[index].name ?? "",
+                          price: "${controller.products[index].price}",
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),

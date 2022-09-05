@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:frontend/models/product_model.dart';
 import 'package:get/get.dart';
@@ -40,8 +38,8 @@ class ProductController extends GetxController {
         products.add(ProductModel.fromJson(product));
       }
       update(["products"]);
-    } catch (err) {
-      print("err $err");
+    } on DioError catch (err) {
+      print(err.message);
     }
   }
 }
