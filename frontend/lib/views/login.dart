@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:frontend/constants/color_contants.dart';
+import 'package:frontend/controllers/auth_controller.dart';
 import 'package:frontend/views/register.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +15,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool obscureText = true;
+  Map<String, dynamic> form = {};
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,11 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        form = {...form, "email": value};
+                      });
+                    },
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -63,6 +70,11 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      form = {...form, "password": value};
+                    });
+                  },
                   obscureText: obscureText,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
@@ -88,21 +100,27 @@ class _LoginState extends State<Login> {
                   width: MediaQuery.of(context).size.width,
                   height: 47,
                   margin: const EdgeInsets.only(top: 10, bottom: 21),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(ColorConstants.primaryBlue),
-                      elevation: 5,
-                      shadowColor: Color(ColorConstants.primaryBlue),
-                    ),
-                    child: const Text(
-                      "Sign In",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  child: GetBuilder<AuthController>(
+                      init: AuthController(),
+                      builder: (controller) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            controller.login(form);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(ColorConstants.primaryBlue),
+                            elevation: 5,
+                            shadowColor: Color(ColorConstants.primaryBlue),
+                          ),
+                          child: const Text(
+                            "Sign In",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),

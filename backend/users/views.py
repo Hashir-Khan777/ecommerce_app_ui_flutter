@@ -41,3 +41,23 @@ class UsersDetailApiView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserLoginApiView(APIView):
+    def post(self, request):
+        user_instance = User.objects.get(email=request.data.get("email"))
+        if not user_instance:
+            return Response(
+                {"message": "user does not exists"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = UserSerializer(
+            instance=user_instance, data=request.data, partial=True
+        )
+        if serializer.is_valid() and request.data.get(
+            "password"
+        ) == serializer.data.get("password"):
+            token = jwt.encode(serializer.data, os.getenv("JWT_SECRET"))
+            return Response(
+                {**serializer.data, "token": token}, status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -161,7 +161,7 @@ class Home extends StatelessWidget {
                       crossAxisCount: 2,
                       crossAxisSpacing: 4.0,
                       mainAxisSpacing: 4.0,
-                      mainAxisExtent: 209,
+                      mainAxisExtent: 262,
                     ),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/color_contants.dart';
-import 'package:frontend/views/home.dart';
+import 'package:frontend/widgets/bottomnavigation_widget.dart';
 import 'package:get/get.dart';
 
 class Splash extends StatefulWidget {
@@ -16,7 +15,12 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () => Get.offAll(const Home()));
+    Timer(
+      const Duration(seconds: 3),
+      () => Get.offAll(
+        const BottomNavigation(),
+      ),
+    );
   }
 
   @override

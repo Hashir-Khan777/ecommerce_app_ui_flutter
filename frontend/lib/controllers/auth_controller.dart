@@ -26,4 +26,21 @@ class AuthController extends GetxController {
       print(err.message);
     }
   }
+
+  login(userInfo) async {
+    try {
+      final response = await Dio().post(
+        "http://192.168.0.104:8000/api/users/login/",
+        data: jsonEncode(userInfo),
+      );
+      UserModel user = UserModel.fromJson(response.data);
+      storage.then((prefs) {
+        prefs.setString("user", user.token);
+        productController.checkToken();
+        Get.to(const Home());
+      });
+    } on DioError catch (err) {
+      print(err.message);
+    }
+  }
 }

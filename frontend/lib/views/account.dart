@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Cart extends StatelessWidget {
-  const Cart({super.key});
+class Account extends StatelessWidget {
+  const Account({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cart"),
+        title: const Text("Account"),
       ),
     );
   }

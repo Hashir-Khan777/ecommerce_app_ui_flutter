@@ -9,7 +9,6 @@ Widget customCard(
 }) {
   return Container(
     width: MediaQuery.of(context).size.width * .46,
-    height: 209,
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       border: Border.all(
@@ -59,6 +58,35 @@ Widget customCard(
             Icon(Icons.star_border, size: 16),
             Icon(Icons.star_border, size: 16),
           ],
+        ),
+        Container(
+          alignment: Alignment.bottomRight,
+          margin: const EdgeInsets.only(top: 10),
+          child: SizedBox(
+            width: 105,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(ColorConstants.primaryBlue),
+                shadowColor: Color(ColorConstants.primaryBlue),
+              ),
+              onPressed: () {},
+              child: Row(
+                children: const [
+                  Icon(
+                    Icons.add_shopping_cart_outlined,
+                    size: 15,
+                  ),
+                  Text(
+                    "Add To Cart",
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         )
       ],
     ),
