@@ -5,8 +5,15 @@ import 'package:frontend/constants/color_contants.dart';
 import 'package:frontend/views/register.dart';
 import 'package:get/get.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,7 @@ class Login extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Your Email',
@@ -55,10 +63,25 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  obscureText: obscureText,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
                     hintText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline, size: 25),
+                    prefixIcon: const Icon(Icons.lock_outline, size: 25),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                      child: Icon(
+                        obscureText
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 25,
+                      ),
+                    ),
                   ),
                 ),
                 Container(

@@ -17,12 +17,16 @@ class ProductController extends GetxController {
 
   @override
   onInit() {
+    checkToken();
+    getAllProducts();
+    super.onInit();
+  }
+
+  checkToken() {
     storage.then((prefs) {
       user = prefs.getString('user');
       update(["user"]);
     });
-    getAllProducts();
-    super.onInit();
   }
 
   changeSliderIndex(int index) {

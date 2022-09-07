@@ -1,8 +1,13 @@
+import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
+import jwt
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class UsersListApiView(APIView):
@@ -10,7 +15,10 @@ class UsersListApiView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            token = jwt.encode(serializer.data, os.getenv("JWT_SECRET"))
+            return Response(
+                {**serializer.data, "token": token}, status=status.HTTP_200_OK
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

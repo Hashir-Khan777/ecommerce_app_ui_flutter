@@ -1,16 +1,28 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/color_contants.dart';
+import 'package:frontend/controllers/auth_controller.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/views/login.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    ImagePicker picker = ImagePicker();
+  State<Register> createState() => _RegisterState();
+}
 
+class _RegisterState extends State<Register> {
+  ImagePicker picker = ImagePicker();
+  Map<String, dynamic> form = {};
+  File? userImage;
+  bool obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(ColorConstants.primaryWhite),
       body: Center(
@@ -54,22 +66,41 @@ class Register extends StatelessWidget {
                       color: Color(ColorConstants.primaryGrey).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(100),
                     ),
-                    child: const Icon(Icons.add_a_photo_outlined),
+                    child: userImage != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Image.file(
+                              userImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const Icon(Icons.add_a_photo_outlined),
                   ),
                   onTap: () async {
                     XFile? image =
-                        await picker.pickImage(source: ImageSource.camera);
-                    print("image ${image?.path}");
+                        await picker.pickImage(source: ImageSource.gallery);
+                    if (image != null) {
+                      setState(() {
+                        userImage = File(image.path);
+                      });
+                      setState(() {
+                        form = {...form, "image": "${File(image.path)}"};
+                      });
+                    }
                   },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 18.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Full Name',
                       prefixIcon: Icon(Icons.person_outline, size: 25),
                     ),
+                    onChanged: (value) => setState(() {
+                      form = {...form, "name": value};
+                    }),
                   ),
                 ),
                 Padding(
@@ -85,44 +116,75 @@ class Register extends StatelessWidget {
                       DropdownMenuItem(value: "male", child: Text("Male")),
                       DropdownMenuItem(value: "female", child: Text("Famale")),
                     ],
-                    onChanged: (value) {},
+                    onChanged: (value) => setState(() {
+                      form = {...form, "gender": value};
+                    }),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 18.0),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Your Email',
                       prefixIcon: Icon(Icons.email_outlined, size: 25),
                     ),
+                    onChanged: (value) => setState(() {
+                      form = {...form, "email": value};
+                    }),
                   ),
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  obscureText: obscureText,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
                     hintText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline, size: 25),
+                    prefixIcon: const Icon(Icons.lock_outline, size: 25),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                      child: Icon(
+                        obscureText
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        size: 25,
+                      ),
+                    ),
                   ),
+                  onChanged: (value) => setState(() {
+                    form = {...form, "password": value};
+                  }),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   height: 47,
                   margin: const EdgeInsets.only(top: 10, bottom: 21),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(ColorConstants.primaryBlue),
-                      elevation: 5,
-                      shadowColor: Color(ColorConstants.primaryBlue),
-                    ),
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  child: GetBuilder<AuthController>(
+                    init: AuthController(),
+                    builder: (controller) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          controller.signUp(form);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(ColorConstants.primaryBlue),
+                          elevation: 5,
+                          shadowColor: Color(ColorConstants.primaryBlue),
+                        ),
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Row(
