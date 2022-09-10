@@ -12,6 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "image",
             "price",
             "brand",
+            "userId",
             "created_at",
             "updated_at",
         ]

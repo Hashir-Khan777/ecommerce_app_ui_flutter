@@ -6,6 +6,7 @@ Widget customCard(
   required String image,
   required String name,
   required String price,
+  required VoidCallback addToCart,
 }) {
   return Container(
     width: MediaQuery.of(context).size.width * .46,
@@ -69,7 +70,7 @@ Widget customCard(
                 backgroundColor: Color(ColorConstants.primaryBlue),
                 shadowColor: Color(ColorConstants.primaryBlue),
               ),
-              onPressed: () {},
+              onPressed: addToCart,
               child: Row(
                 children: const [
                   Icon(

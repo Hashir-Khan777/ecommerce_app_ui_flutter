@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/color_contants.dart';
 import 'package:frontend/controllers/product_controller.dart';
 import 'package:frontend/views/login.dart';
+import 'package:frontend/views/product.dart';
 import 'package:frontend/widgets/card_widget.dart';
 import 'package:get/get.dart';
 
@@ -155,27 +156,39 @@ class Home extends StatelessWidget {
               GetBuilder<ProductController>(
                 id: "products",
                 builder: (controller) {
-                  return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0,
-                      mainAxisExtent: 262,
-                    ),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.products.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        child: customCard(
-                          context,
-                          image: controller.products[index].image ?? "",
-                          name: controller.products[index].name ?? "",
-                          price: "${controller.products[index].price}",
-                        ),
-                      );
-                    },
+                  if (controller.products.isNotEmpty) {
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 4.0,
+                        mainAxisSpacing: 4.0,
+                        mainAxisExtent: 262,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.products.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller
+                                .getProductById(controller.products[index].id);
+                            Get.to(const ProductDetails());
+                          },
+                          child: customCard(
+                            context,
+                            image: controller.products[index].image ?? "",
+                            name: controller.products[index].name ?? "",
+                            price: "${controller.products[index].price}",
+                            addToCart: () => controller.addToCart(
+                                25, controller.products[index].id),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
                 },
               ),

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/constants/color_contants.dart';
+import 'package:frontend/controllers/cart_controller.dart';
+import 'package:frontend/controllers/product_controller.dart';
+import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
@@ -6,8 +10,123 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(ColorConstants.primaryWhite),
       appBar: AppBar(
-        title: const Text("Cart"),
+        backgroundColor: Color(ColorConstants.primaryWhite),
+        foregroundColor: Color(ColorConstants.primaryBlack),
+        elevation: 0,
+        title: Text(
+          "Your Cart",
+          style: TextStyle(
+            color: Color(ColorConstants.navyBlue),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: GetBuilder<CartController>(
+          id: "cart",
+          init: CartController(),
+          builder: (controller) {
+            return ListView.builder(
+              itemCount: controller.cart.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  padding: const EdgeInsets.all(6),
+                  width: MediaQuery.of(context).size.width,
+                  height: 110,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color(ColorConstants.primaryGrey),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        margin: const EdgeInsets.only(right: 10),
+                        child: Image.network(
+                          controller.cart[index].image ?? "",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  controller.cart[index].name ?? "",
+                                  style: TextStyle(
+                                    color: Color(ColorConstants.navyBlue),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: const Icon(
+                                        Icons.favorite_border,
+                                        size: 23,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.removeFromCart(
+                                          controller.cart[index].id,
+                                        );
+                                        // controller.getCart();
+                                      },
+                                      child: const Icon(
+                                        Icons.delete_outlined,
+                                        size: 23,
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "\$${controller.cart[index].price}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Color(
+                                      ColorConstants.primaryBlue,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -18,9 +18,9 @@ class ProductsListApiView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProductsDetailApiView(APIView):
     def get(self, request, product_id):
         product = Product.objects.get(id=product_id)
         serializer = ProductSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
