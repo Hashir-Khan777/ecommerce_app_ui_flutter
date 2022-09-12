@@ -29,7 +29,7 @@ class CartDetailsApiView(APIView):
                 {"message": "product does not exists"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        data = {"userId": user.get("id")}
+        data = {"userId": user.get("id"), "quantity": 1}
         serializer = ProductSerializer(
             instance=product_instance, data=data, partial=True
         )
@@ -47,7 +47,7 @@ class CartDetailsApiView(APIView):
                 {"message": "product does not exists"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        data = {"userId": ""}
+        data = {"userId": "", "quantity": 0}
         serializer = ProductSerializer(
             instance=product_instance, data=data, partial=True
         )

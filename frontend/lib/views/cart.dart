@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/color_contants.dart';
 import 'package:frontend/controllers/cart_controller.dart';
-import 'package:frontend/controllers/product_controller.dart';
 import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
@@ -90,7 +89,6 @@ class Cart extends StatelessWidget {
                                         controller.removeFromCart(
                                           controller.cart[index].id,
                                         );
-                                        // controller.getCart();
                                       },
                                       child: const Icon(
                                         Icons.delete_outlined,
@@ -115,6 +113,69 @@ class Cart extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 25,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color(0xffEBF0FF),
+                                        ),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          controller.changeQuantity(
+                                            controller.cart[index].id,
+                                            add: false,
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.remove_outlined,
+                                          size: 19,
+                                        ),
+                                      ),
+                                    ),
+                                    GetBuilder<CartController>(
+                                      id: "quantity",
+                                      builder: (context) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 3,
+                                          ),
+                                          color: const Color(0xffEBF0FF),
+                                          width: 35,
+                                          child: Center(
+                                            child: Text(
+                                              "${controller.cart[index].quantity}",
+                                              style: const TextStyle(
+                                                color: Color(0xff223263),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    Container(
+                                      width: 25,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color(0xffEBF0FF),
+                                        ),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          controller.changeQuantity(
+                                            controller.cart[index].id,
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.add_outlined,
+                                          size: 19,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ],

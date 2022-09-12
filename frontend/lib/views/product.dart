@@ -173,7 +173,9 @@ class ProductDetails extends StatelessWidget {
                           alignment: Alignment.bottomCenter,
                           elevation: 6,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.addToCart(controller.product?.id);
+                        },
                         child: const Center(
                           child: Text(
                             "Add To Cart",

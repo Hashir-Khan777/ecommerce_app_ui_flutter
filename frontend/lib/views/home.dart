@@ -180,8 +180,8 @@ class Home extends StatelessWidget {
                             image: controller.products[index].image ?? "",
                             name: controller.products[index].name ?? "",
                             price: "${controller.products[index].price}",
-                            addToCart: () => controller.addToCart(
-                                25, controller.products[index].id),
+                            addToCart: () => controller
+                                .addToCart(controller.products[index].id),
                           ),
                         );
                       },

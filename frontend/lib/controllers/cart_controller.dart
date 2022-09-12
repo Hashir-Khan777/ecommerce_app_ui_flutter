@@ -42,4 +42,21 @@ class CartController extends GetxController {
       print(err.message);
     }
   }
+
+  changeQuantity(int? id, {bool add = true}) {
+    ProductModel product = cart.firstWhere((element) => element.id == id);
+    if (add) {
+      if (product.quantity! < product.stock!) {
+        product.quantity = product.quantity! + 1;
+      }
+      productController.updateProduct(id, product);
+      update(["quantity"]);
+    } else {
+      if (product.quantity! > 1) {
+        product.quantity = product.quantity! - 1;
+        productController.updateProduct(id, product);
+        update(["quantity"]);
+      }
+    }
+  }
 }

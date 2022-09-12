@@ -62,7 +62,18 @@ class ProductController extends GetxController {
     }
   }
 
-  addToCart(int? userId, int? productId) async {
+  updateProduct(int? id, ProductModel productObj) async {
+    try {
+      await Dio().put(
+        "http://192.168.0.104:8000/api/products/$id/",
+        data: jsonEncode(productObj.toJson()),
+      );
+    } on DioError catch (err) {
+      print(err.message);
+    }
+  }
+
+  addToCart(int? productId) async {
     try {
       await Dio().put(
         "http://192.168.0.104:8000/api/cart/$productId/",

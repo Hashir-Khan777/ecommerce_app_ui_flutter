@@ -13,6 +13,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "brand",
             "userId",
+            "quantity",
+            "stock",
             "created_at",
             "updated_at",
         ]

@@ -20,6 +20,23 @@ class ProductsListApiView(APIView):
 
 
 class ProductsDetailApiView(APIView):
+    def put(self, request, product_id):
+        product_instance = Product.objects.get(id=product_id)
+        if not product_instance:
+            return Response(
+                {"message": "product does not exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        serializer = ProductSerializer(
+            instance=product_instance, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data, status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request, product_id):
         product = Product.objects.get(id=product_id)
         serializer = ProductSerializer(product)
