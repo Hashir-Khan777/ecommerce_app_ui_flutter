@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:frontend/controllers/product_controller.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/views/home.dart';
+import 'package:frontend/widgets/bottomnavigation_widget.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +21,7 @@ class AuthController extends GetxController {
       storage.then((prefs) {
         prefs.setString("user", user.token);
         productController.checkToken();
-        Get.to(const Home());
+        Get.to(const BottomNavigation());
       });
     } on DioError catch (err) {
       print(err.message);
@@ -37,7 +38,7 @@ class AuthController extends GetxController {
       storage.then((prefs) {
         prefs.setString("user", user.token);
         productController.checkToken();
-        Get.to(const Home());
+        Get.to(const BottomNavigation());
       });
     } on DioError catch (err) {
       print(err.message);
