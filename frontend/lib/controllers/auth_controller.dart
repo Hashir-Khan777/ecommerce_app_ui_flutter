@@ -38,7 +38,7 @@ class AuthController extends GetxController {
       storage.then((prefs) {
         prefs.setString("user", user.token);
         productController.checkToken();
-        Get.to(const BottomNavigation());
+        Get.offAll(const BottomNavigation());
       });
     } on DioError catch (err) {
       print(err.message);

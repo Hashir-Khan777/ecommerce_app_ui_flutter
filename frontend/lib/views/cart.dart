@@ -214,15 +214,52 @@ class Cart extends StatelessWidget {
                 },
               ),
             ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text('Items '),
-                    Text('(1)'),
-                  ],
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Color(ColorConstants.primaryGrey),
+                  ),
                 ),
-              ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text('Items '),
+                      GetBuilder<CartController>(
+                        id: "items",
+                        builder: (controller) {
+                          return Text("(${controller.cart.length}):");
+                        },
+                      ),
+                      GetBuilder<CartController>(
+                        id: "price",
+                        builder: (controller) {
+                          int totalPrice = controller.cart.fold(
+                            0,
+                            (previousValue, element) =>
+                                (previousValue + element.price!) *
+                                element.quantity!,
+                          );
+                          return Text("\$$totalPrice");
+                        },
+                      ),
+                    ],
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Checkout",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ),

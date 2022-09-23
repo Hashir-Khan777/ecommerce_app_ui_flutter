@@ -9,7 +9,6 @@ import jwt
 
 class CartListApiView(APIView):
     def get(self, request):
-        print(request.headers)
         token = request.headers.get("token")[7:]
         user = jwt.decode(token, os.getenv("JWT_SECRET"), algorithms=["HS256"])
         product = Product.objects.filter(userId=user.get("id"))

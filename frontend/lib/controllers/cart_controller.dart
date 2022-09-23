@@ -24,7 +24,7 @@ class CartController extends GetxController {
       for (var product in response.data) {
         cart.add(ProductModel.fromJson(product));
       }
-      update(["cart"]);
+      update(["cart", "price", "items"]);
     } on DioError catch (err) {
       print(err.message);
     }
@@ -36,7 +36,7 @@ class CartController extends GetxController {
       await Dio().delete(
         "http://192.168.0.104:8000/api/cart/$productId/",
       );
-      update(["cart"]);
+      update(["cart", "price", "items"]);
       Get.snackbar("Removed from cart", "Product has been removed from cart");
     } on DioError catch (err) {
       print(err.message);
@@ -50,12 +50,12 @@ class CartController extends GetxController {
         product.quantity = product.quantity! + 1;
       }
       productController.updateProduct(id, product);
-      update(["quantity"]);
+      update(["quantity", "price", "items"]);
     } else {
       if (product.quantity! > 1) {
         product.quantity = product.quantity! - 1;
         productController.updateProduct(id, product);
-        update(["quantity"]);
+        update(["quantity", "price", "items"]);
       }
     }
   }
