@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:frontend/controllers/product_controller.dart';
 import 'package:frontend/models/user_model.dart';
-import 'package:frontend/views/home.dart';
 import 'package:frontend/widgets/bottomnavigation_widget.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +13,7 @@ class AuthController extends GetxController {
   signUp(userInfo) async {
     try {
       final response = await Dio().post(
-        "http://192.168.0.104:8000/api/users/",
+        "https://flutterecommerceappwithpython.herokuapp.com/api/users/",
         data: jsonEncode(userInfo),
       );
       UserModel user = UserModel.fromJson(response.data);
@@ -31,7 +30,7 @@ class AuthController extends GetxController {
   login(userInfo) async {
     try {
       final response = await Dio().post(
-        "http://192.168.0.104:8000/api/users/login/",
+        "https://flutterecommerceappwithpython.herokuapp.com/api/users/login/",
         data: jsonEncode(userInfo),
       );
       UserModel user = UserModel.fromJson(response.data);

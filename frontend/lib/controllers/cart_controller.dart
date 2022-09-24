@@ -17,7 +17,7 @@ class CartController extends GetxController {
   getCart() async {
     try {
       final response = await Dio().get(
-        "http://192.168.0.104:8000/api/cart/",
+        "https://flutterecommerceappwithpython.herokuapp.com/api/cart/",
         options:
             Options(headers: {"token": "Bearer ${productController.user}"}),
       );
@@ -34,7 +34,7 @@ class CartController extends GetxController {
     try {
       cart = cart.where((element) => element.id != productId).toList();
       await Dio().delete(
-        "http://192.168.0.104:8000/api/cart/$productId/",
+        "https://flutterecommerceappwithpython.herokuapp.com/api/cart/$productId/",
       );
       update(["cart", "price", "items"]);
       Get.snackbar("Removed from cart", "Product has been removed from cart");

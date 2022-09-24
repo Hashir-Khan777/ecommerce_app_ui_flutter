@@ -39,8 +39,8 @@ class ProductController extends GetxController {
 
   getAllProducts() async {
     try {
-      final response =
-          await Dio().get("http://192.168.0.104:8000/api/products/");
+      final response = await Dio().get(
+          "https://flutterecommerceappwithpython.herokuapp.com/api/products/");
       for (var product in response.data) {
         products.add(ProductModel.fromJson(product));
       }
@@ -53,8 +53,8 @@ class ProductController extends GetxController {
   getProductById(int? id) async {
     product = null;
     try {
-      final response =
-          await Dio().get("http://192.168.0.104:8000/api/products/$id/");
+      final response = await Dio().get(
+          "https://flutterecommerceappwithpython.herokuapp.com/api/products/$id/");
       product = ProductModel.fromJson(response.data);
       update(["Product"]);
     } on DioError catch (err) {
@@ -65,7 +65,7 @@ class ProductController extends GetxController {
   updateProduct(int? id, ProductModel productObj) async {
     try {
       await Dio().put(
-        "http://192.168.0.104:8000/api/products/$id/",
+        "https://flutterecommerceappwithpython.herokuapp.com/api/products/$id/",
         data: jsonEncode(productObj.toJson()),
       );
     } on DioError catch (err) {
@@ -76,7 +76,7 @@ class ProductController extends GetxController {
   addToCart(int? productId) async {
     try {
       await Dio().put(
-        "http://192.168.0.104:8000/api/cart/$productId/",
+        "https://flutterecommerceappwithpython.herokuapp.com/api/cart/$productId/",
         options: Options(headers: {"token": "Bearer $user"}),
       );
       Get.snackbar("Added to cart", "Product has been added to cart");
